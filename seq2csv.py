@@ -23,6 +23,6 @@ with open(inputfile, 'r') as sequa:
             try:
                 content = re.search(re.escape(fields[line[10:14]]) + '(.+?)\$\$', line).group(1)
             except AttributeError:
-                content = ''
+                content = re.search(re.escape(fields[line[10:14]]) + '(.+?)$', line).group(1)
             rec[line[10:14]] = content
-            print(line,"-->",content)
+            print(line[10:14],"-->",content)
