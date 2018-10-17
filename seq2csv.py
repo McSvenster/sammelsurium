@@ -4,10 +4,11 @@
 # ETH Library: Sven Koesling
 # Oktober 2018
 import sys
+import re
 
 inputfile = sys.argv[1]
 
-fields = {"245": "$$a", "100": "$$a", "264": "$$c", "PST4": "$$j"}
+fields = {"245 ": "$$a", "100 ": "$$a", "264 ": "$$c", "PST4": "$$j"}
 
 sysno = ""
 with open(inputfile, 'r') as sequa:
@@ -18,6 +19,10 @@ with open(inputfile, 'r') as sequa:
             sysno = line[:9]
             rec = {}
 
-        if (line[10:13] in fields.keys() and fields[line[10:13]] in line):
-            rec[line[10:13]] = "bla"
-            print(line)
+        if (line[10:14] in fields.keys() and fields[line[10:14]] in line):
+            try:
+                content = re.search(re.escape(fields[line[10:14]]) + '(.+?)\$\$', line).group(1)
+            except AttributeError:
+                content = ''
+            rec[line[10:14]] = content
+            print(line,"-->",content)
